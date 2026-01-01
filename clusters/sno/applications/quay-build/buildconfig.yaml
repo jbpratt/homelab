@@ -17,9 +17,6 @@ spec:
     type: Docker
     dockerStrategy:
       dockerfilePath: Dockerfile
-      cacheFrom:
-        - kind: ImageStreamTag
-          name: quay:latest
   resources:
     limits:
       cpu: "4"
