@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - lvms-cluster
   - frigate
+  - nfd-instance
