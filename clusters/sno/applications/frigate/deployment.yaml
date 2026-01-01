@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  labels:
+    app.kubernetes.io/name: frigate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frigate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frigate
+    spec:
+      serviceAccountName: frigate
+      containers:
+        - name: frigate
+          image: ghcr.io/blakeblackshear/frigate:0.16.3
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: config
+              mountPath: /config/config.yml
+              subPath: config.yml
+            - name: media
+              mountPath: /media/frigate
+            - name: recordings
+              mountPath: /media/frigate/recordings
+      volumes:
+        - name: config
+          secret:
+            secretName: config
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-pvc
+        - name: recordings
+          persistentVolumeClaim:
+            claimName: recordings-pvc

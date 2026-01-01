@@ -1,0 +1,31 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: frigate
+  labels:
+    app.kubernetes.io/name: frigate
+spec:
+  host: frigate.majora.homelab.lan
+  to:
+    kind: Service
+    name: frigate
+    weight: 100
+  port:
+    targetPort: 5000
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: go2rtc
+  labels:
+    app.kubernetes.io/name: frigate
+spec:
+  host: go2rtc.majora.homelab.lan
+  to:
+    kind: Service
+    name: frigate
+    weight: 100
+  port:
+    targetPort: 1984
+  wildcardPolicy: None
