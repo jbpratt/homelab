@@ -1,0 +1,27 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: garage-s3
+spec:
+  host: garage-s3.majora.homelab.lan
+  to:
+    kind: Service
+    name: garage
+    weight: 100
+  port:
+    targetPort: 3900
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: garage-admin
+spec:
+  host: garage-admin.majora.homelab.lan
+  to:
+    kind: Service
+    name: garage
+    weight: 100
+  port:
+    targetPort: 3903
+  wildcardPolicy: None

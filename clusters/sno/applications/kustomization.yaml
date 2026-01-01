@@ -4,3 +4,4 @@ resources:
   - lvms-cluster
   - frigate
   - nfd-instance
+  - garage
