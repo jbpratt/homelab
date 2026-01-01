@@ -8,10 +8,6 @@ spec:
     deviceClasses:
       - name: vg1
         default: true
-        deviceSelector:
-          paths: []
-          optionalPaths: []
-          forceWipeDevicesAndDestroyAllData: false
         thinPoolConfig:
           name: thin-pool-1
           sizePercent: 90
