@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quay
+  namespace: quay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quay
+  template:
+    metadata:
+      labels:
+        app: quay
+    spec:
+      serviceAccountName: quay
+      containers:
+        - name: quay
+          image: image-registry.openshift-image-registry.svc:5000/quay-build/quay:latest
+          args: ["registry-nomigrate"]
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+            - name: metrics
+              containerPort: 9091
+          env:
+            - name: DEBUGLOG
+              value: "false"
+            - name: WORKER_COUNT_WEB
+              value: "4"
+            - name: WORKER_COUNT_SECSCAN
+              value: "2"
+            - name: WORKER_COUNT_REGISTRY
+              value: "8"
+          volumeMounts:
+            - name: config
+              mountPath: /conf/stack
+              readOnly: false
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 4Gi
+            limits:
+              cpu: 2000m
+              memory: 8Gi
+          startupProbe:
+            httpGet:
+              path: /health/instance
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 20
+            periodSeconds: 15
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /health/instance
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /health/instance
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 10
+      volumes:
+        - name: config
+          secret:
+            secretName: quay-config
+            items:
+              - key: config.yaml
+                path: config.yaml

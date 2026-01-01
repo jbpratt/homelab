@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: postgres-quay
+  namespace: quay
 spec:
   serviceName: postgres
   replicas: 1
@@ -24,7 +24,7 @@ spec:
               value: /var/lib/postgresql/data/pgdata
           envFrom:
             - secretRef:
-                name: postgres-credentials
+                name: quay-secrets
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
