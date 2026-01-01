@@ -6,3 +6,4 @@ resources:
   - nfd-instance
   - garage
   - quay-build
+  - postgres-quay
