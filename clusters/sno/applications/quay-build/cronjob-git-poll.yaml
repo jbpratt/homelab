@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: quay-git-poll
+  namespace: quay-build
+spec:
+  schedule: "0 * * * *" # Every hour
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: build-trigger
+          containers:
+            - name: git-poll-trigger
+              image: registry.redhat.io/openshift4/ose-cli:latest
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  set -e
+
+                  # Get latest commit from GitHub
+                  REMOTE_SHA=$(curl -sf https://api.github.com/repos/quay/quay/commits/master | grep -m1 '"sha"' | cut -d'"' -f4)
+
+                  if [ -z "$REMOTE_SHA" ]; then
+                    echo "Failed to fetch remote SHA"
+                    exit 1
+                  fi
+
+                  # Get last built commit (stored in ConfigMap)
+                  LAST_SHA=$(oc get configmap quay-build-state -o jsonpath='{.data.last-commit}' 2>/dev/null || echo "none")
+
+                  echo "Remote SHA: $REMOTE_SHA"
+                  echo "Last built SHA: $LAST_SHA"
+
+                  if [ "$REMOTE_SHA" != "$LAST_SHA" ]; then
+                    echo "New commit detected, triggering build..."
+                    oc start-build quay-master --wait=false
+
+                    # Update state
+                    oc patch configmap quay-build-state -p "{\"data\":{\"last-commit\":\"$REMOTE_SHA\"}}"
+
+                    echo "Build triggered for commit $REMOTE_SHA"
+                  else
+                    echo "No new commits, skipping build"
+                  fi
+          restartPolicy: OnFailure

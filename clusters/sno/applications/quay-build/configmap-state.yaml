@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quay-build-state
+  namespace: quay-build
+data:
+  last-commit: "none"

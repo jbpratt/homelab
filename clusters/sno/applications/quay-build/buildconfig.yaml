@@ -1,0 +1,31 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: quay-master
+  namespace: quay-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: quay:latest
+  source:
+    type: Git
+    git:
+      uri: https://github.com/quay/quay.git
+      ref: master
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+      cacheFrom:
+        - kind: ImageStreamTag
+          name: quay:latest
+  resources:
+    limits:
+      cpu: "4"
+      memory: 8Gi
+    requests:
+      cpu: "2"
+      memory: 4Gi
+  # No automatic triggers - CronJob handles git polling
+  triggers: []
