@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: quay-prometheus-rules
+  namespace: quay
+  labels:
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+    - name: quay-alerts.rules
+      rules:
+        - alert: QuayPodFrequentlyRestarting
+          expr: increase(kube_pod_container_status_restarts_total{namespace="quay", pod=~"quay-.*"}[1h]) > 5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            description: Pod {{$labels.namespace}}/{{$labels.pod}} was restarted {{$value}} times within the last hour
+            message: Quay Pod is restarting frequently
+        - alert: QuayHighMemoryUsage
+          expr: container_memory_usage_bytes{namespace="quay", container="quay"} / container_spec_memory_limit_bytes{namespace="quay", container="quay"} > 0.9
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            description: Quay container memory usage is above 90%
+            message: Quay high memory usage
