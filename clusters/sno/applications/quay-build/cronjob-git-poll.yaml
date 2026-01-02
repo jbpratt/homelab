@@ -4,7 +4,7 @@ metadata:
   name: quay-git-poll
   namespace: quay-build
 spec:
-  schedule: "0 * * * *" # Every hour
+  schedule: "0 8-20 * * 1-5" # Every hour, 8am-8pm, Mon-Fri
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
