@@ -5,6 +5,8 @@ metadata:
   namespace: quay
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: quay

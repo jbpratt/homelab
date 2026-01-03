@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: frigate
 spec:
-  host: frigate.majora.homelab.lan
+  host: frigate.apps.majora.home.lab
   to:
     kind: Service
     name: frigate
@@ -21,7 +21,7 @@ metadata:
   labels:
     app.kubernetes.io/name: frigate
 spec:
-  host: go2rtc.majora.homelab.lan
+  host: go2rtc.apps.majora.home.lab
   to:
     kind: Service
     name: frigate

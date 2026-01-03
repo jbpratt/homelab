@@ -3,7 +3,7 @@ kind: Route
 metadata:
   name: garage-s3
 spec:
-  host: garage-s3.majora.homelab.lan
+  host: garage-s3.apps.majora.home.lab
   to:
     kind: Service
     name: garage
@@ -17,7 +17,7 @@ kind: Route
 metadata:
   name: garage-admin
 spec:
-  host: garage-admin.majora.homelab.lan
+  host: garage-admin.apps.majora.home.lab
   to:
     kind: Service
     name: garage
