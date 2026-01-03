@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: quay-dev
+  namespace: quay-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: quay:staging
+  source:
+    type: Git
+    git:
+      uri: https://github.com/quay/quay.git
+      ref: master
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  resources:
+    limits:
+      cpu: "4"
+      memory: 8Gi
+    requests:
+      cpu: "2"
+      memory: 4Gi
+  triggers: []

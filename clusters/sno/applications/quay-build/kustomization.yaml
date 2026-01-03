@@ -4,6 +4,7 @@ resources:
   - namespace.yaml
   - imagestream.yaml
   - buildconfig.yaml
+  - buildconfig-dev.yaml
   - rbac.yaml
   - configmap-state.yaml
   - cronjob-git-poll.yaml
