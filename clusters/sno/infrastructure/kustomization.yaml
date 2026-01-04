@@ -6,3 +6,4 @@ resources:
   - nfd
   - image-registry
   - monitoring
+  - local-path-provisioner
