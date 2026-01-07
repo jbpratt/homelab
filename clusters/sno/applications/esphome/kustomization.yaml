@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: esphome
 resources:
   - namespace.yaml
+  - rbac.yaml
   - deployment.yaml
   - service.yaml
   - pvc.yaml
