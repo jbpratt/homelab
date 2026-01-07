@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: immich
+spec:
+  host: immich.apps.majora.home.lab
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: immich
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

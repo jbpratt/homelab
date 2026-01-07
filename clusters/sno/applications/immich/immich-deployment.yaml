@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      serviceAccountName: immich
+      initContainers:
+        - name: init-permissions
+          image: registry.access.redhat.com/ubi8/ubi-minimal
+          command: ["sh", "-c", "chown -R 1000:1000 /upload && chmod -R 775 /upload && chcon -R -t container_file_t /upload"]
+          volumeMounts:
+            - name: library
+              mountPath: /upload
+          securityContext:
+            runAsUser: 0
+            privileged: true
+      containers:
+        - name: immich-server
+          image: ghcr.io/immich-app/immich-server:release
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+          ports:
+            - name: http
+              containerPort: 2283
+          env:
+            - name: IMMICH_PORT
+              value: "2283"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_PASSWORD
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_USERNAME
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_DATABASE_NAME
+            - name: DB_HOSTNAME
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: REDIS_HOSTNAME
+              value: redis
+            - name: REDIS_PORT
+              value: "6379"
+            - name: IMMICH_MACHINE_LEARNING_ENABLED
+              value: "false"
+            - name: UPLOAD_LOCATION
+              value: /usr/src/app/upload
+            - name: TZ
+              value: "America/New_York"
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2
+              memory: 4Gi
+          startupProbe:
+            httpGet:
+              path: /api/server/ping
+              port: 2283
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /api/server/ping
+              port: 2283
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/server/ping
+              port: 2283
+            periodSeconds: 30
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: library-pvc
