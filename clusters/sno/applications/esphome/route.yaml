@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: esphome
+  labels:
+    app.kubernetes.io/name: esphome
+spec:
+  host: esphome.apps.majora.home.lab
+  to:
+    kind: Service
+    name: esphome
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
