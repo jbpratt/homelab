@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassistant
+  labels:
+    app: homeassistant
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: homeassistant
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      serviceAccountName: homeassistant
+      initContainers:
+        - name: install-hacs
+          image: busybox:1.36
+          securityContext:
+            runAsUser: 0
+            privileged: true
+          command:
+            - /bin/sh
+            - -c
+            - |
+              chown -R 0:0 /config
+              if [ ! -d /config/custom_components/hacs ]; then
+                echo "Installing HACS..."
+                mkdir -p /config/custom_components/hacs
+                wget -O /tmp/hacs.zip https://github.com/hacs/integration/releases/latest/download/hacs.zip
+                unzip -o /tmp/hacs.zip -d /config/custom_components/hacs
+                rm /tmp/hacs.zip
+                echo "HACS installed successfully"
+              else
+                echo "HACS already installed"
+              fi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-assistant/home-assistant:2025.12.5
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          ports:
+            - containerPort: 8123
+              name: http
+          env:
+            - name: TZ
+              value: America/New_York
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: backup
+              mountPath: /backup
+            - name: config-file
+              mountPath: /config/configuration.yaml
+              subPath: configuration.yaml
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 2Gi
+              cpu: 2000m
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8123
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8123
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8123
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 30
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-pvc
+        - name: backup
+          persistentVolumeClaim:
+            claimName: backup-pvc
+        - name: config-file
+          configMap:
+            name: homeassistant-config
