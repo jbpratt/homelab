@@ -9,3 +9,5 @@ resources:
   - quay
   - esphome
   - homeassistant
+  - adguard
+  - vaultwarden
