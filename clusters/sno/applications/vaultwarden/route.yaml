@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: vaultwarden
+spec:
+  host: vaultwarden.apps.majora.home.lab
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: vaultwarden
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
