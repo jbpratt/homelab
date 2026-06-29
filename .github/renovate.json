@@ -1,18 +1,41 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    ":enableRenovate",
-    "config:base",
-    ":disableRateLimiting"
+    "config:recommended",
+    ":configMigration"
   ],
   "flux": {
-    "fileMatch": [
-      "clusters/[^/]+/flux-system/.+\\.ya?ml$"
+    "managerFilePatterns": [
+      "/^clusters/[^/]+/.+\\.ya?ml$/"
     ]
   },
   "kubernetes": {
-    "fileMatch": [
-      "clusters/[^/]+/(?!flux-system/).+\\.ya?ml$"
+    "managerFilePatterns": [
+      "/^clusters/[^/]+/(?:applications|infrastructure)(?:/.*)?\\.ya?ml$/"
     ]
   },
+  "packageRules": [
+    {
+      "description": "Do not try to update images built inside the cluster registry.",
+      "matchPackageNames": [
+        "image-registry.openshift-image-registry.svc:5000/quay-build/quay"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Label GitOps container updates.",
+      "matchManagers": [
+        "flux",
+        "kubernetes",
+        "kustomize"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "addLabels": [
+        "container"
+      ]
+    }
+  ],
   "rebaseWhen": "conflicted"
 }
