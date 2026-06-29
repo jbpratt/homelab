@@ -2,8 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":configMigration"
+    ":configMigration",
+    "docker:pinDigests"
   ],
+  "dependencyDashboard": true,
+  "labels": [
+    "dependencies"
+  ],
+  "prConcurrentLimit": 4,
+  "prHourlyLimit": 1,
+  "schedule": [
+    "* 22-23,0-5 * * 1-5",
+    "* * * * 0,6"
+  ],
+  "timezone": "America/Chicago",
   "flux": {
     "managerFilePatterns": [
       "/^clusters/[^/]+/.+\\.ya?ml$/"
@@ -23,6 +35,19 @@
       "enabled": false
     },
     {
+      "description": "Wait for fresh container tags to age before creating PRs when registry timestamps are available.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "minimumReleaseAge": "3 days",
+      "minimumReleaseAgeBehaviour": "timestamp-optional",
+      "prCreation": "not-pending",
+      "internalChecksFilter": "strict",
+      "addLabels": [
+        "stability-days"
+      ]
+    },
+    {
       "description": "Label GitOps container updates.",
       "matchManagers": [
         "flux",
@@ -34,6 +59,32 @@
       ],
       "addLabels": [
         "container"
+      ]
+    },
+    {
+      "description": "Require dashboard approval for major container updates.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true,
+      "addLabels": [
+        "major"
+      ]
+    },
+    {
+      "description": "Label container digest maintenance separately.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "pinDigest"
+      ],
+      "addLabels": [
+        "digest"
       ]
     }
   ],
