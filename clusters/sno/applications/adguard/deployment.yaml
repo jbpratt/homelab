@@ -23,7 +23,7 @@ spec:
         fsGroup: 0
       containers:
         - name: adguard
-          image: adguard/adguardhome:v0.107.71
+          image: adguard/adguardhome:v0.107.77
           securityContext:
             privileged: true
             runAsUser: 0
