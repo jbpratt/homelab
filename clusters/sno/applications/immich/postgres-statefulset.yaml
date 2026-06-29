@@ -16,7 +16,7 @@ spec:
       serviceAccountName: immich
       containers:
         - name: postgres
-          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3@sha256:dbf18b3ffea4a81434c65b71e20d27203baf903a0275f4341e4c16dfd901fd67
           ports:
             - containerPort: 5432
           env:
