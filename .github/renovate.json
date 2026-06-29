@@ -28,13 +28,6 @@
   },
   "packageRules": [
     {
-      "description": "Do not try to update images built inside the cluster registry.",
-      "matchPackageNames": [
-        "image-registry.openshift-image-registry.svc:5000/quay-build/quay"
-      ],
-      "enabled": false
-    },
-    {
       "description": "Wait for fresh container tags to age before creating PRs when registry timestamps are available.",
       "matchDatasources": [
         "docker"

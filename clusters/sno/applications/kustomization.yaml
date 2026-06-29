@@ -4,9 +4,6 @@ resources:
   - lvms-cluster
   - frigate
   - nfd-instance
-  - garage
-  - quay-build
-  - quay
   - esphome
   - homeassistant
   - adguard
