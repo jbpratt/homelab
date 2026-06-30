@@ -1,49 +1,21 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: homeassistant-config
+    name: homeassistant-config
 data:
-  configuration.yaml: |
-    homeassistant:
-      name: Home
-      unit_system: metric
-      time_zone: America/New_York
-
-    http:
-      use_x_forwarded_for: true
-      trusted_proxies:
-        - 10.128.0.0/14
-        - 10.244.0.0/16
-        - 127.0.0.1
-
-    default_config:
-
-    automation:
-      - alias: "Daily Backup"
-        trigger:
-          - platform: time
-            at: "03:00:00"
-        action:
-          - service: backup.create
-      - id: notify_garage_door_state_change
-        alias: "Notify Garage Door State Change"
-        trigger:
-          - platform: state
-            entity_id: cover.garage_door
-        condition:
-          - condition: template
-            value_template: >-
-              {{ trigger.from_state is not none
-                 and trigger.to_state is not none
-                 and trigger.from_state.state != trigger.to_state.state
-                 and trigger.to_state.state not in ['unknown', 'unavailable'] }}
-        action:
-          - service: notify.send_message
-            target:
-              entity_id: notify.bradys_iphone
-            data:
-              title: "Garage Door"
-              message: >-
-                Garage door changed from {{ trigger.from_state.state | replace('_', ' ') }}
-                to {{ trigger.to_state.state | replace('_', ' ') }}.
-        mode: single
+    configuration.yaml: ENC[AES256_GCM,data:q4aWUDuHvsnrL7lrjxtwm9F7WO9VzubftdVF6dR3p3awE0HI28ky0pc6gBR0xVIhoVIz71GTifg90dF57rYeyEAViBeW8ZHAKK90JCjrv0QH71vEzbwOCOKBnxtxSSdxv53nArxNK7OgbCh3GmP2MJ9lNoo565WSaDTV5qQWFA4Vww+PB0giiHRBdkSGFZpqlH7AVknYHCTQz+d0gu1alvYa+234A1F8aJ4cjdnCqufVFQsyH2Up8cF14jfB6cK3zyHnui14OM533nkfn49p32lpqvhPG4ySM+EsBoOLboQq7hEHavU10dWcyS2w949jG3od0506BU7SXtrf94E4Ktyhn7UJmavaH6MZVRYPO8JKoJRK89ts7SgLH4M/jkaGCZlJH7r6PJKdSwo2YFvjUHtQqg4J49Iwh4F1QiEe5tdAwQ2lMZNQw0+Lnrbt9hdxAaQ2vDRMaMgR+kiN0SWTYeLI/PYD0Asr8ygPgGhODbv/gr8NMKm5UwvlgEAM5c2SGGHoY5FeG7RVrSmIg94k9hXN0w65wAI+EsnIu6ngFDOQQWV7Qe+Zamls1Rsr4o8H93VNNUhrRTiGtBQXf7QYXDAA15yIuTXlSFg76DTQtw9gm93lZSX5OoThva0bTf+jIiiKyB5AJw8ybPezmgo7f8P4A0x95Vz8fAtkRXE1L4weopFGavnK6cSBaCjgTGODNaf1O85Jat5BicrFGmQQ7R1dsEk1+tLFodPM6daEBSPLkoRvYf5u573GbsI2X2Yu57mU042Wdt5Tx0+aiIF/OLu6SlH28od5XyVQiOGN7YQG/0Ek1G4q6AdPHhLp0H7cYhV1wfVsnT0+2+MJmwAPHyh5MoGb1wEE7jPnjQUjUbOM4dI0+mlo/YZevhiwejgG/6fHMf3Kyxv9KaJ0DiDqSCtTP1Ol9qamTJ8QEjH5DoVUnQTCIRIWeJSjgYQCcn1mk01AJy/t1l83nK6KU3XXjX7JMOpKmXsztdyHFmBxyARJiAux1HbXI6Dm3CngHUmZjG7cb6qkkVEN+9GnZYFJ+sk5vR8b5JGBC0b+240JrjhRL+0ZDy6LEPTFBoh+LneV/3Bvvz5Bck/S1C6zMxhRIvX/lOd84BjYQzQYv7D0VsVyWp+jma+/Ankhp/eZkjh7b7PPdcyB7jBielQFx9zfLSObe7v5J3G0yLoiDsF6+7Q10aDTVJMsCvarCfgSJPkgc9c5MaE1UGrxzlhuUqMNQFWxLPq+PJTHcrRW73H8Wmrpe4KCSenUuYDLD3qFHUtnAV25hO/PcMwdhf5cS+9XDd2ltfjNPs/4w6iSLA2c7LHWtUjtrFvW+o53sMt4OE3t8W2clGkbby/BaCDYHmgkABZMoBMkI43UFcVhtdbU7/SDn7b2l7SjLHhTYES0SyJ+BAI+K7ZrWW6dzWFB2eZi22tzP5vtkMkCVPG0yPXQIj6Y3f9Mz0J3WtcJHDoVhSk2O9lq4EGWAqESMwUpsZbBOemA90Gi0k2ZHz3MOTGsVd3J5cHMSkmekfYov/a8SS1OL1BkNKez+oG3Ld6QKq7jz+oo1gCKNeASvlNyqCZyrfnxoVsqXGGBcS29D0wuhcigyw==,iv:v8+IGK66hSQdhmiDE0ViTkJDJMBLHqWnLvGCn7dwcus=,tag:EUIzey8O6oIKBUIFRTwSmw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4MmxiUmJBMDFETXJrckVr
+            aGZ4OGhENHR5bWtVbUlkblJmQ0s1N1FpUGlJCmJESWxvOUkzdVhldkdSaG5zUkQ2
+            UmdYR3c5bFlkWEtFMmV0U3ZpTmZ1RHcKLS0tIDBhdDJKVGoxd1cxOHJScUhBdVRB
+            cno5dUlWUXMwajQ1TjZpSlBVVHdJRFUKN3ZI2GKaqyXb0dXIht5RE1m+Js28uF7x
+            PdXemz+ZWL9f5dcoRsEerl+1W8P8PCaRFhwktgpiWVvErDzgBdBXuQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1jqn3xexdp75t7mgn4nyl3jhnqgsvxmnxpxu3c9x8zs27k439v9yqja32v3
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-06-30T00:41:54Z"
+    mac: ENC[AES256_GCM,data:5fkeffxmZBjYep+ECY9qQhEK+t6MG3MhQEafk1gVg9KIwHqZhwkFwSj0Vz0PuTE3vLT7f4xEWZpty1j5rDrPL/+ENDeszTUnliq0YYbdOwBlKyDmKqw1qBELCaAxKYV3zWIDAMldmgj1GjTqRhoRw4KgDxwKgJ2C+59gLBGnqBY=,iv:/91EOV1xf1u/ARx+PyO/FjyNf03+4QUZ7zDjbdsKBY4=,tag:880Km6Wa0gAuYi596UZZ0g==,type:str]
+    version: 3.13.1
