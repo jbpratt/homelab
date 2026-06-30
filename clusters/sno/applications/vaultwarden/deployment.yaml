@@ -23,7 +23,7 @@ spec:
         fsGroup: 0
       containers:
         - name: vaultwarden
-          image: vaultwarden/server:1.35.2@sha256:d89a6d21e361254670c24a4272b4b5f245e402c284f2f55de2c379fdbcfa1fa5
+          image: vaultwarden/server:1.36.0@sha256:d626d04934cd1192ad8ced1adb975099fca78cec33ab467d2d3c923cde7f3b0c
           securityContext:
             privileged: true
             runAsUser: 0
