@@ -4,7 +4,7 @@ resources:
   - lvms-cluster
   - frigate
   - nfd-instance
-  - esphome
+  # - esphome
   - homeassistant
   - adguard
   - vaultwarden
