@@ -25,3 +25,25 @@ data:
             at: "03:00:00"
         action:
           - service: backup.create
+      - id: notify_garage_door_state_change
+        alias: "Notify Garage Door State Change"
+        trigger:
+          - platform: state
+            entity_id: cover.garage_door
+        condition:
+          - condition: template
+            value_template: >-
+              {{ trigger.from_state is not none
+                 and trigger.to_state is not none
+                 and trigger.from_state.state != trigger.to_state.state
+                 and trigger.to_state.state not in ['unknown', 'unavailable'] }}
+        action:
+          - service: notify.send_message
+            target:
+              entity_id: notify.bradys_iphone
+            data:
+              title: "Garage Door"
+              message: >-
+                Garage door changed from {{ trigger.from_state.state | replace('_', ' ') }}
+                to {{ trigger.to_state.state | replace('_', ' ') }}.
+        mode: single
