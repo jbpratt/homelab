@@ -8,3 +8,4 @@ resources:
   - homeassistant
   - adguard
   - vaultwarden
+  - immich
