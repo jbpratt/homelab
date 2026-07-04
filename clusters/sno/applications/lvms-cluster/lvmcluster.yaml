@@ -8,6 +8,10 @@ spec:
     deviceClasses:
       - name: vg1
         default: true
+        deviceSelector:
+          paths:
+            - /dev/sda
+            - /dev/sdd
         thinPoolConfig:
           name: thin-pool-1
           sizePercent: 90
