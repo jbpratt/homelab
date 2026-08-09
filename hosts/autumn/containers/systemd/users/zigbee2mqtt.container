@@ -1,0 +1,24 @@
+[Unit]
+Description=Zigbee2MQTT coordinator
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=ghcr.io/koenkk/zigbee2mqtt:2.12.1@sha256:80f7f04f72a99e4c4ef51ef7e98ee736edba6db0ecbb7abc626d0c4b0f1871f1
+ContainerName=zigbee2mqtt
+Pull=missing
+AddDevice=/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_7c33458abaa1f011a59cd45165454926-if00-port0:/dev/ttyUSB0:rwm
+GroupAdd=keep-groups
+Volume=/home/jbpratt/.local/share/zigbee2mqtt:/app/data
+Environment=TZ=America/Chicago
+Environment=ZIGBEE2MQTT_CONFIG_MQTT_USER=zigbee
+EnvironmentFile=/home/jbpratt/.config/zigbee2mqtt/mqtt.env
+PublishPort=127.0.0.1:8080:8080
+
+[Service]
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target

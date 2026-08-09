@@ -1,0 +1,27 @@
+version: 5
+
+mqtt:
+  server: mqtt://192.168.1.50:31883
+  base_topic: zigbee2mqtt
+
+serial:
+  port: /dev/ttyUSB0
+  adapter: ember
+  baudrate: 115200
+  rtscts: false
+
+advanced:
+  channel: 25
+  network_key: GENERATE
+  pan_id: GENERATE
+  ext_pan_id: GENERATE
+  log_output:
+    - console
+
+homeassistant:
+  enabled: true
+
+frontend:
+  enabled: true
+  host: 0.0.0.0
+  port: 8080
