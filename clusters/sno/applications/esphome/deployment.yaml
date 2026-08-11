@@ -24,7 +24,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: esphome
-          image: "esphome/esphome:2026.6.4@sha256:3df4d482ee77ef65a1b5ae2175779529998d0cfb370f1d95ca008110a015d475"
+          image: "esphome/esphome:2026.7.4@sha256:4866347cb5b4f932a3ecf951ba49db662f565c634663efc9125f385d271e0565"
           imagePullPolicy: IfNotPresent
           env:
             - name: ESPHOME_DASHBOARD_USE_PING
