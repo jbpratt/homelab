@@ -1,0 +1,73 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: homeassistant-kubernetes-integration
+  labels:
+    app.kubernetes.io/name: homeassistant-kubernetes-integration
+    app.kubernetes.io/component: rbac
+# Permissions for the Home Assistant Kubernetes Integration (v1.9.0)
+# In-cluster setup — HA pod uses its projected SA token for auth.
+rules:
+  # Core resources — monitoring + watch + pod deletion
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch", "patch"]
+  - apiGroups: [""]
+    resources: ["namespaces", "events"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "delete"]
+
+  # Apps resources — monitoring + watch + rollout restart + scaling
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets"]
+    verbs: ["patch"]
+  - apiGroups: ["apps"]
+    resources:
+      - deployments/scale
+      - statefulsets/scale
+      - statefulsets/status
+    verbs: ["get", "patch", "update"]
+
+  # Batch resources — monitoring + watch + cronjob triggering + job deletion
+  - apiGroups: ["batch"]
+    resources: ["cronjobs", "cronjobs/status", "jobs"]
+    verbs: ["get", "list", "watch", "patch", "update", "create", "delete"]
+
+  # Networking resources — monitoring + watch (Ingress URLs in the panel)
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch"]
+
+  # Metrics API — CPU and memory usage (requires metrics-server)
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["nodes", "pods"]
+    verbs: ["get", "list"]
+
+  # Legacy API compatibility (Kubernetes < 1.16)
+  - apiGroups: ["extensions"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["deployments/scale"]
+    verbs: ["get", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: homeassistant-kubernetes-integration
+  labels:
+    app.kubernetes.io/name: homeassistant-kubernetes-integration
+    app.kubernetes.io/component: rbac
+subjects:
+  - kind: ServiceAccount
+    name: homeassistant
+    namespace: homeassistant
+roleRef:
+  kind: ClusterRole
+  name: homeassistant-kubernetes-integration
+  apiGroup: rbac.authorization.k8s.io
