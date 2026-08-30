@@ -4,6 +4,7 @@ namespace: homeassistant
 resources:
   - namespace.yaml
   - rbac.yaml
+  - ha-k8s-rbac.yaml
   - pvc.yaml
   - config.yaml
   - deployment.yaml
