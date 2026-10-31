@@ -1,0 +1,16 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: master-sizing-imagegc
+spec:
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/master: ""
+  # Size system-reserved CPU/memory from node capacity instead of the static
+  # 1Gi/500m default, which SNO's control plane routinely exceeds.
+  autoSizingReserved: true
+  kubeletConfig:
+    # Default high threshold is 85%; the root disk sat at 84% with ~1.8k
+    # unused images because GC never triggered.
+    imageGCHighThresholdPercent: 70
+    imageGCLowThresholdPercent: 60
