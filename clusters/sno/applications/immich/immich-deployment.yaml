@@ -96,4 +96,4 @@ spec:
       volumes:
         - name: library
           persistentVolumeClaim:
-            claimName: library-pvc
+            claimName: library-lvms
