@@ -6,3 +6,19 @@ metadata:
 data:
   config.yaml: |
     enableUserWorkload: true
+    prometheusK8s:
+      retention: 15d
+      retentionSize: 40GB
+      volumeClaimTemplate:
+        spec:
+          storageClassName: lvms-vg1
+          resources:
+            requests:
+              storage: 50Gi
+    alertmanagerMain:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: lvms-vg1
+          resources:
+            requests:
+              storage: 2Gi
