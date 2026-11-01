@@ -96,10 +96,10 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: config-pvc
+            claimName: config-lvms
         - name: backup
           persistentVolumeClaim:
-            claimName: backup-pvc
+            claimName: backup-lvms
         - name: config-file
           configMap:
             name: homeassistant-config
