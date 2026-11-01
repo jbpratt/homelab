@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: work
           persistentVolumeClaim:
-            claimName: adguard-work
+            claimName: adguard-work-lvms
         - name: conf
           persistentVolumeClaim:
-            claimName: adguard-conf
+            claimName: adguard-conf-lvms
