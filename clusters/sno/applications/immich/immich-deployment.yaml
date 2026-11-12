@@ -17,7 +17,7 @@ spec:
       serviceAccountName: immich
       initContainers:
         - name: init-permissions
-          image: registry.access.redhat.com/ubi8/ubi-minimal@sha256:ecc9eba659d04c56b12da3efb83483349d57aa08734ad3e64e9bd6128806c7cc
+          image: registry.access.redhat.com/ubi8/ubi-minimal@sha256:b3314c5f8d009ee6df04ead732bca6d3eaf011750185e348f55fce2678fb30d0
           command: ["sh", "-c", "chown -R 1000:1000 /upload && chmod -R 775 /upload && chcon -R -t container_file_t /upload"]
           volumeMounts:
             - name: library
