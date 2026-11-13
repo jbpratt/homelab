@@ -9,4 +9,4 @@ patches:
 images:
   - name: tailscale/k8s-operator
     newName: ghcr.io/tailscale/k8s-operator
-    newTag: v1.98.4@sha256:59060effe5baeeac7909f23871549fbbd9da78dd5b03af8c89bccb35ba46e93c
+    newTag: v1.104.7@sha256:51ba104ff02afcc39f93189415c8b2f44fb6037e8592d626bfa52c3c8afc02f6
