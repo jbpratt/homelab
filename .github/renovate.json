@@ -5,7 +5,9 @@
     ":configMigration",
     "docker:pinDigests"
   ],
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "labels": [
     "dependencies"
   ],
