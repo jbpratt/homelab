@@ -7,6 +7,7 @@ resources:
   - ha-k8s-rbac.yaml
   - pvc.yaml
   - config.yaml
+  - packages.yaml
   - deployment.yaml
   - service.yaml
   - tailscale-ingress.yaml
